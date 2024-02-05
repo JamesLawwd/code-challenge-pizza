@@ -1,12 +1,12 @@
 import { Link } from "react-router-dom";
-import logo from "../logo.png";
+import pizzaLogo from "../pizzaLogo.png";
 
-function Navbar() {
+function Header() {
   return (
     <header>
-      <div className="logo">
-        <img src={logo} alt="Pizza logo" />
-        <h1>The Pizza Society</h1>
+      <div className="brand">
+        <img src={pizzaLogo} alt="Pizza logo" />
+        <h1>Pizza Palace</h1>
       </div>
       <nav>
         <Link to="/">Home</Link>
@@ -15,4 +15,4 @@ function Navbar() {
   );
 }
 
-export default Navbar;
+export default Header;

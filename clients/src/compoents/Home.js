@@ -1,48 +1,30 @@
-import React, { useEffect, useState } from "react";
+import { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
 
-function Home() {
-  const [restaurants, setRestaurants] = useState([]);
+function RestaurantList() {
+  const [restaurantList, setRestaurantList] = useState([]);
 
   useEffect(() => {
-    const fetchRestaurants = async () => {
-      try {
-        const response = await fetch("/restaurants");
-        if (response.ok) {
-          const data = await response.json();
-          setRestaurants(data);
-        } else {
-          console.error("Failed to fetch restaurants");
-        }
-      } catch (error) {
-        console.error("Error while fetching restaurants:", error);
-      }
-    };
-
-    fetchRestaurants();
+    fetch("/restaurants")
+      .then((response) => response.json())
+      .then(setRestaurantList);
   }, []);
 
-  const handleDelete = async (id) => {
-    try {
-      const response = await fetch(`/restaurants/${id}`, {
-        method: "DELETE",
-      });
-
+  function handleDelete(id) {
+    fetch(`/restaurants/${id}`, {
+      method: "DELETE",
+    }).then((response) => {
       if (response.ok) {
-        setRestaurants((prevRestaurants) =>
-          prevRestaurants.filter((restaurant) => restaurant.id !== id)
+        setRestaurantList((restaurants) =>
+          restaurants.filter((restaurant) => restaurant.id !== id)
         );
-      } else {
-        console.error("Failed to delete restaurant");
       }
-    } catch (error) {
-      console.error("Error while deleting restaurant:", error);
-    }
-  };
+    });
+  }
 
   return (
     <section className="container">
-      {restaurants.map((restaurant) => (
+      {restaurantList.map((restaurant) => (
         <div key={restaurant.id} className="card">
           <h2>
             <Link to={`/restaurants/${restaurant.id}`}>{restaurant.name}</Link>
@@ -55,4 +37,4 @@ function Home() {
   );
 }
 
-export default Home;
+export default RestaurantList;
