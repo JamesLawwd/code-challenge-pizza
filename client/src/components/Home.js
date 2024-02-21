@@ -1,21 +1,21 @@
 import { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
 
-function RestaurantList() {
-  const [restaurantList, setRestaurantList] = useState([]);
+function Home() {
+  const [restaurants, setRestaurants] = useState([]);
 
   useEffect(() => {
     fetch("/restaurants")
-      .then((response) => response.json())
-      .then(setRestaurantList);
+      .then((r) => r.json())
+      .then(setRestaurants);
   }, []);
 
   function handleDelete(id) {
     fetch(`/restaurants/${id}`, {
       method: "DELETE",
-    }).then((response) => {
-      if (response.ok) {
-        setRestaurantList((restaurants) =>
+    }).then((r) => {
+      if (r.ok) {
+        setRestaurants((restaurants) =>
           restaurants.filter((restaurant) => restaurant.id !== id)
         );
       }
@@ -24,7 +24,7 @@ function RestaurantList() {
 
   return (
     <section className="container">
-      {restaurantList.map((restaurant) => (
+      {restaurants.map((restaurant) => (
         <div key={restaurant.id} className="card">
           <h2>
             <Link to={`/restaurants/${restaurant.id}`}>{restaurant.name}</Link>
@@ -37,4 +37,4 @@ function RestaurantList() {
   );
 }
 
-export default RestaurantList;
+export default Home;

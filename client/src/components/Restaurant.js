@@ -1,9 +1,9 @@
 import { useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
-import CustomPizzaForm from "./CustomPizzaForm";
+import PizzaForm from "./PizzaForm";
 
-function RestaurantDetails() {
-  const [{ data: restaurant, error, status }, setRestaurantDetails] = useState({
+function Home() {
+  const [{ data: restaurant, error, status }, setRestaurant] = useState({
     data: null,
     error: null,
     status: "pending",
@@ -11,29 +11,21 @@ function RestaurantDetails() {
   const { id } = useParams();
 
   useEffect(() => {
-    fetch(`/restaurants/${id}`).then((response) => {
-      if (response.ok) {
-        response.json().then((restaurantDetails) =>
-          setRestaurantDetails({
-            data: restaurantDetails,
-            error: null,
-            status: "resolved",
-          })
+    fetch(`/restaurants/${id}`).then((r) => {
+      if (r.ok) {
+        r.json().then((restaurant) =>
+          setRestaurant({ data: restaurant, error: null, status: "resolved" })
         );
       } else {
-        response.json().then((err) =>
-          setRestaurantDetails({
-            data: null,
-            error: err.error,
-            status: "rejected",
-          })
+        r.json().then((err) =>
+          setRestaurant({ data: null, error: err.error, status: "rejected" })
         );
       }
     });
   }, [id]);
 
-  function handleNewPizzaAddition(newPizza) {
-    setRestaurantDetails({
+  function handleAddPizza(newPizza) {
+    setRestaurant({
       data: {
         ...restaurant,
         pizzas: [...restaurant.pizzas, newPizza],
@@ -65,13 +57,10 @@ function RestaurantDetails() {
       </div>
       <div className="card">
         <h3>Add New Pizza</h3>
-        <CustomPizzaForm
-          restaurantId={restaurant.id}
-          onAddNewPizza={handleNewPizzaAddition}
-        />
+        <PizzaForm restaurantId={restaurant.id} onAddPizza={handleAddPizza} />
       </div>
     </section>
   );
 }
 
-export default RestaurantDetails;
+export default Home;
