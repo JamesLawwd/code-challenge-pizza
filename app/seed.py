@@ -1,7 +1,7 @@
 from flask_sqlalchemy import SQLAlchemy
 from faker import Faker
 from datetime import datetime, timezone
-from models import db, Restaurant, Pizza, Restaurant_pizza
+from models import db, Restaurant, Pizza,RestaurantPizza
 from app import app as flask_app  # Renaming app to flask_app to avoid conflicts
 
 fake = Faker()
@@ -10,7 +10,7 @@ flask_app.app_context().push()
 # Function to create fake data and add to the database
 def seed_data():
     # Clear existing data
-    db.session.query(Restaurant_pizza).delete()
+    db.session.query(RestaurantPizza).delete()
     db.session.query(Restaurant).delete()
     db.session.query(Pizza).delete()
     db.session.commit()
@@ -28,9 +28,9 @@ def seed_data():
     db.session.commit()
 
     # Create Restaurant_pizzas (Associations)
-    new_association1 = Restaurant_pizza(restaurant=new_restaurant1, pizza=new_pizza1, price=15)
-    new_association2 = Restaurant_pizza(restaurant=new_restaurant1, pizza=new_pizza2, price=18)
-    new_association3 = Restaurant_pizza(restaurant=new_restaurant2, pizza=new_pizza1, price=16)
+    new_association1 = RestaurantPizza(restaurant=new_restaurant1, pizza=new_pizza1, price=15)
+    new_association2 = RestaurantPizza(restaurant=new_restaurant1, pizza=new_pizza2, price=18)
+    new_association3 = RestaurantPizza(restaurant=new_restaurant2, pizza=new_pizza1, price=16)
 
     # Add Restaurant_pizzas to the session
     db.session.add_all([new_association1, new_association2, new_association3])
